@@ -1,5 +1,6 @@
 package InMemoryModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ModelElements.Camera;
@@ -12,12 +13,27 @@ public class ModelStore implements IModelChanger {
     public List<Scene> scenes;
     public List<Flash> flashes;
     public List<Camera> cameras;
-    private List<IModelChangeObserver> changeObservers;
+    private IModelChangeObserver[] changeObservers;
 
-    public Scene getScene(int sceneNumber) {
-        return new Scene();
+    public ModelStore(IModelChangeObserver[] changeObservers) {
+        this.changeObservers = changeObservers;
+        this.models = new ArrayList<PoligonalModel>();
+        this.scenes = new ArrayList<Scene>();
+        this.flashes = new ArrayList<Flash>();
+        this.cameras = new ArrayList<Camera>();
     }
 
+    /**
+     * Возвращает сцену по её идентификатору
+     * 
+     * @param sceneNumber номер сцены
+     * @return сцену
+     */
+    public Scene getScene(int sceneNumber) {
+        return scenes.get(sceneNumber);
+    }
+
+    @Override
     public void notifyChange(IModelChanger change) {
 
     }

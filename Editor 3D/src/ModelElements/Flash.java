@@ -1,7 +1,7 @@
 package ModelElements;
 
+import java.awt.Color;
 import Stuff.Angle3D;
-import Stuff.Color;
 import Stuff.Point3D;
 
 public class Flash {
