@@ -1,0 +1,49 @@
+@startuml Car
+skinparam classAttributeIconSize 0
+package Classes { 
+    enum Body
+    enum TypeFuel
+    enum TypeGearbox
+    class Car {
+        - manufacturer : String
+        - model : String 
+        - color : Color 
+        - bodyType : Body 
+        - numberWheels : int
+        - fuel : TypeFuel 
+        - gearbox : TypeGearbox 
+        - engineCapacity : float 
+        + void move() 
+        + void maintenance()
+        + {abstract} gearShift() : int
+        + void switchHeadlights()
+        + void switchWipers()
+    }
+
+    interface IRefueling {
+        void fuel()
+    }
+
+    interface IWip {
+        void wipWindshield();
+        void wipHeadlights();
+        void wipMirrors();
+    }
+
+    class Pickup {
+        - loadCapacity : int
+        + gearShift() : int
+        + void fuel()
+        + void wipWindshield()
+        + void wipHeadlights()
+        + void wipMirrors()
+    }
+    
+    Car "1 " <--* Body
+    Car "1 " <--* TypeFuel
+    Car "1 " <--* TypeGearbox
+    Pickup --|> Car
+    Pickup ..|> IRefueling
+    Pickup ..|> IWip
+}
+@enduml
