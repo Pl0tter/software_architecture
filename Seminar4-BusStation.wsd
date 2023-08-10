@@ -1,0 +1,50 @@
+@startuml Bus Station
+skinparam classAttributeIconSize 0
+class User {
+    - id : int
+    - userName : string
+    - cardNumber : long
+    - hashPassword : int
+    + getId() : int
+    + getUserName() : string
+    + setUserNAme(string): boolean
+    + getCardNumber() long
+    + getHashPassword() : int
+}
+class Carrier {
+    - id : int
+    - routeNumber : long
+    - zones[2,*] : int
+    - value : short
+    - remark : string
+    + getId() : int
+    + getRouteNumber() : string
+    + getZones(): int
+    + setZones(int[2,*]) : boolean
+    + getRemark() : string
+    + getValue() : short
+}
+class Ticket {
+    - id : int
+    - isValid : boolean
+    - place : int
+    - date : Date
+    - routeNumber : int
+    - zoneStart : int
+    - zoneStop : int
+    - price: double
+    + getRouteNumber() : int
+    + getPlace() : int
+    + getPrice() : double
+    + getData() : Date
+    + getValid() : boolean
+    + getId() : long
+    + void setValid(boolean)
+    + void setZoneStart(int)
+    + void setZoneStop(int)
+}
+class BankAccount {
+    - card : long
+    - balance : double
+}
+@enduml
