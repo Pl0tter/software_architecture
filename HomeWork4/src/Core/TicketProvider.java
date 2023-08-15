@@ -30,7 +30,6 @@ public class TicketProvider {
         return ticketRepo.readAll(routeNumber);
     }
 
-
     /**
      * Метод обновления статуса билета
      *
@@ -38,6 +37,7 @@ public class TicketProvider {
      * @return результат выполнения операции
      */
     public boolean updateTicketStatus(Ticket ticket) {
+        ticket.setValid(false);
         return ticketRepo.update(ticket);
     }
 }
