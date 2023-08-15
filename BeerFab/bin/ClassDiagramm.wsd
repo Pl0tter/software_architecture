@@ -1,0 +1,75 @@
+@startuml BeerFab
+skinparam classAttributeIconSize 0
+package Models { 
+    enum TypeSensor {
+        PRESSURE
+        TEMPERATURE
+    }
+    class Sensor {
+        - {static} index : int
+        - id : int
+        - status : boolean 
+        - data : double 
+        - type : TypeSensor
+        + void switchStatus()
+        + getId() : int
+    }
+
+    interface ISensor {
+        + checkStatus() : boolean
+        + getData() : double
+    }
+
+    Sensor --> TypeSensor : 1..1
+    Sensor ..|> ISensor
+    
+}
+package Services {
+    interface ISensorRepository {
+        + void add(Sensor)
+        + get(int id) : Sensor
+        + void update(Sensor)
+        + void delete(int id)
+    }
+    
+    class SensorRepository implements Iterable {
+        - sensors : ArrayList
+    }
+
+    class DataRepository implements Iterable {
+        - data : ArrayList
+        + void add(int id, long date, double data)
+        + read(int id) : HashMap<Long, Double>
+        + sizeOf() : int
+    }
+    SensorRepository ..|> ISensorRepository
+}
+package Business {
+    class Maintance {
+        + powerOn(SensorRepository) : boolean
+        + powerOff(SensorRepository) : boolean
+    }
+    class Monitoring {
+        - date : Date
+        - criticalValue : double
+        + collectData(SensorRepository, DataRepository) : boolean 
+        + checkWarning(DataRepository) : boolean
+    }
+}
+package Application {
+    class View {
+        + {static} void printStatus(SensorRepository)
+        + {static} void warning(boolean)
+    }
+}
+class App {
+
+
+}
+App --* SensorRepository
+SensorRepository --* Sensor
+App --* DataRepository
+App --> View
+App --> Maintance
+App --* Monitoring
+@enduml
