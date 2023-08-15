@@ -36,7 +36,7 @@ public class CashProvider {
      */
     // подсказка  Carrier carrier = carrierRepository.read(1);
     // подсказка  return cashRepository.transaction(ticket.getPrice(), cardNumber, carrier.getCardNumber());
-    public boolean buy(Ticket ticket){
+    public boolean buy(Ticket ticket) {
         Carrier carrier = carrierRepository.read(1);
         return cashRepository.transaction(ticket.getPrice(), cardNumber, carrier.getCardNumber());
     }
@@ -46,7 +46,9 @@ public class CashProvider {
      *
      * @param client
      */
-    public void authorization(User client){
-
+    public void authorization(User client) {
+        //Здесь должна быть реализована сверка аккаунта приложения и банковского аккаунта.
+        cardNumber = client.getCardNumber();
+        isAuthorized = true;
     }
 }
