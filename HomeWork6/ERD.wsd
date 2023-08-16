@@ -1,0 +1,87 @@
+@startuml ERD
+
+skinparam linetype ortho
+
+entity "Patient" as patient {
+    *id : INT **<<PK>>** AUTO_INCREMENT
+    --
+    name : VARCHAR
+    adress : VARCHAR
+    phone : BIGINT UNSIGNED
+    e-mail : VARCHAR
+    OMS : BIGINT
+    DMS : BIGINT
+    birthday : DATE
+    sex : ENUM
+    *history_id : INT **<<FK>>**
+}
+
+entity "History" as history {
+    *id : BIGINT **<<PK>>** AUTO_INCREMENT
+    --
+    date : TIMESTAMP
+    diagnosis : VARCHAR
+    *icd_id : INT **<<FK>>**
+    *doctor_id : INT **<<FK>>**
+}
+
+entity "Analysis" as analysis {
+    *id : BIGINT **<<PK>>** AUTO_INCREMENT
+    --
+    date : TIMESTAMP
+    name : VARCHAR
+    result : VARCHAR
+    *patient_id : INT **<<FK>>**
+}
+
+entity "ICD-10" as ICD {
+    id : INT **<<PK>>** AUTO_INCREMENT
+    --
+    code : VARCHAR
+    name : VARCHAR
+}
+
+entity "Doctor" as doctor {
+    *id : INT **<<PK>>** AUTO_INCREMENT
+    --
+    name : VARCHAR
+    adress : VARCHAR
+    phone : BIGINT UNSIGNED
+    e-mail : VARCHAR
+    *speciality_id : INT **<<FK>>**
+    cabinet : VARCHAR
+}
+
+entity "Speciality" as spec {
+    *id : INT **<<PK>>** AUTO_INCREMENT
+    --
+    name : VARCHAR
+    salary : INT UNSIGNED
+}
+
+entity "Shedule" as shedule {
+    *id : INT UNSIGNED **<<PK>>** AUTO_INCREMENT
+    --
+    date : TIMESTAMP
+    *hospital_id : INT **<<FK>>**
+    *patient_id : INT **<<FK>>**
+    *doctor_id : INT **<<FK>>**
+}
+
+entity "Hospital" as hospital {
+  id : INT **<<PK>>** AUTO_INCREMENT
+  --
+  name : VARCHAR
+  adress : VARCHAR
+}
+
+patient ||..o{ history
+patient ||.left.o{ analysis
+doctor ||..|{ spec
+shedule }|.left.|| patient
+shedule }o..|| doctor
+shedule }|.right.|| hospital
+doctor ||.left.|{ history
+history ||..|{ ICD
+
+@enduml
