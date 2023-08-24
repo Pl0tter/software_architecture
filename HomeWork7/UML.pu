@@ -1,0 +1,97 @@
+@startuml UML Wholesale Company
+' skinparam linetype ortho
+' allowmixing
+
+package Adapter as adapter <<Frame>> {
+    class Port {
+        +parseRequest()
+        
+    }
+    interface iPort {
+        +requestReport(JSON) : JSON
+    }
+    iPort <|.left. Port
+}
+
+package Logic as logic <<Frame>> {
+    class ReportService {
+        +makeReportByCustomer() : ArrayList
+        +makeReportByDate() : ArrayList
+        +makeReportByDelivery() : ArrayList
+        +makeReportByProduct() : ArrayList
+        +makeReportByProvider() : ArrayList
+    }
+    package Domain {
+        class Order {
+            -date : Date
+            -quantity : int
+            -price : double
+            -product : Product
+            -customer : Customer
+            -provider : Provider
+            -delivery : Delivery
+        }
+
+        class Customer {
+            -name : String
+            -type : CustomerType            
+        }
+        enum CustomerType
+
+        class Provider {
+            -name : String
+        }
+        class Delivery {
+            -name : String
+        }
+        class Product {
+            -name : String
+            -price : double
+            -weight : double
+            -type: ProductType
+            -category : Category
+            -subcategory : Subcategory
+        }
+        enum ProductType
+        enum Category
+        enum Subcategory
+
+        Customer -right-> CustomerType
+        Order -up-* Customer
+        Order -left-* Provider
+        Order -right-* Delivery
+        Order -down-* Product
+        Product -left-> ProductType
+        Product -down-> Category
+        Product -right-> Subcategory
+    }
+}
+
+package Repository as repo <<Frame>> {
+    class ReportRepository {
+        - link : String
+        connect() : void
+    }
+
+    interface iRepository {
+        + add(Order) : void
+        + read(Order) : Order
+        + update(Order) : boolean
+        + delete(Order) : boolean
+    }
+
+    iRepository <|.left. ReportRepository
+} 
+
+' adapter -down[hidden]- logic
+' logic -up[hidden]- adapter
+logic -down[hidden]- repo
+Port -down- ReportService
+ReportService -down- ReportRepository
+' together {
+'     adapter
+'     logic
+'     repo
+' }
+
+@enduml

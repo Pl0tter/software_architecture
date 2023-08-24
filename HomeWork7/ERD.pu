@@ -1,0 +1,84 @@
+@startuml ERD Wholesale Company
+
+skinparam linetype ortho
+
+entity "Customer" as customer {
+    *id : INT **<<PK>>** AUTO_INCREMENT
+    --
+    name : VARCHAR
+    adress : VARCHAR
+    phone : BIGINT UNSIGNED
+    e-mail : VARCHAR
+    type : ENUM
+    sex : ENUM
+}
+
+entity "Order" as order {
+    *id : BIGINT **<<PK>>** AUTO_INCREMENT
+    --
+    date : TIMESTAMP
+    quantity : INT
+    price : DECIMAL
+    adress : VARCHAR
+    *product_id : INT **<<FK>>**
+    *customer_id : INT **<<FK>>**
+    *provider_id : INT **<<FK>>**
+    *delivery_id : INT **<<FK>>**
+}
+
+entity "Provider" as provider {
+    *id : INT **<<PK>>** AUTO_INCREMENT
+    --
+    name : VARCHAR
+    adress : VARCHAR
+    phone : BIGINT UNSIGNED
+    e-mail : VARCHAR
+}
+
+entity "Delivery Service" as delivery {
+    *id : INT **<<PK>>** AUTO_INCREMENT
+    --
+    name : VARCHAR
+    adress : VARCHAR
+    phone : BIGINT UNSIGNED
+    e-mail : VARCHAR
+}
+
+entity "Product" as product {
+    *id : INT **<<PK>>** AUTO_INCREMENT
+    --
+    name : VARCHAR
+    price : DECIMAL
+    weight : DECIMAL
+    *type_id : INT **<<FK>>**
+    *category_id : INT **<<FK>>**
+    *subcategory_id : INT **<<FK>>**
+}
+
+entity "Product Type" as type {
+    *id : INT **<<PK>>** AUTO_INCREMENT
+    --
+    name : VARCHAR
+}
+
+entity "Product Category" as category {
+    *id : INT **<<PK>>** AUTO_INCREMENT
+    --
+    name : VARCHAR
+}
+
+entity "Product Subcategory" as subcategory {
+    *id : INT **<<PK>>** AUTO_INCREMENT
+    --
+    name : VARCHAR
+}
+
+customer }|.right.|{ order
+provider }|..|{ order
+delivery }o.left.|{ order
+order }|..|{ product
+product ||..|{ type
+product ||..|{ category
+product ||..|{ subcategory
+
+@enduml
