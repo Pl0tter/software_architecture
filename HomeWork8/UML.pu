@@ -1,0 +1,84 @@
+@startuml UML Table Order
+' skinparam linetype ortho
+' allowmixing
+
+package View as view <<Frame>> {
+    class Adapter {
+        +parseRequest()
+        
+    }
+    interface iSend {
+        +register()
+        +login()
+        +show_orders()
+    }
+    iSend <|.right. Adapter
+}
+
+package Logic as logic <<Frame>> {
+    class Controller {
+        +makeOrder() : Order
+        +showTimetable() : ArrayList
+        +checkAvailable() : ArrayList
+    }
+    package Domain {
+        class Order {
+            -date : Date
+            -quantity : int
+            -guest : int
+            -table : Table
+            -customer : Customer
+        }
+
+        class Customer {
+            -name : String
+            -type : CustomerType 
+            -phone : long
+            -email : String
+            -hash_pwd : long         
+        }
+
+        class Table {
+            -places : int
+            -shape : TableShape
+            -comment : String
+            -hall: Hall
+        }
+        enum TableShape
+
+        class Hall {
+            -name : String
+            -comment : String
+            -smoke : boolean
+        }
+
+        Order -right-* Customer
+        Order -down-* Table
+        Order *-up- Controller
+        Table -left-> TableShape
+        Table -right-> Hall
+
+    }
+}
+
+package Repository as repo <<Frame>> {
+    class Repository {
+        - link : String
+        connect() : void
+    }
+
+    interface iRepository {
+        + add(Order) : void
+        + read(Order) : Order
+        + update(Order) : boolean
+        + delete(Order) : boolean
+    }
+
+    iRepository <|.left. Repository
+} 
+
+
+Controller -left-* Adapter
+Controller -right-* Repository
+
+@enduml
