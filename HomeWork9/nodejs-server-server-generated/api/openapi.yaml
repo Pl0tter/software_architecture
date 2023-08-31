@@ -1,0 +1,166 @@
+openapi: 3.0.0
+info:
+  title: Заказ ресурсов на облаке
+  version: 0.0.1
+servers:
+- url: http://localhost:8080/api/v1/
+  description: Dev server
+paths:
+  /clouds:
+    get:
+      tags:
+      - Clouds
+      summary: Метод получения списка ресурсов на облако
+      operationId: getAllClouds
+      responses:
+        "200":
+          description: Успешный ответ со списком ресурсов в облаке
+          content:
+            adplication/json:
+              schema:
+                $ref: '#/components/schemas/Clouds'
+        default:
+          description: Все остальное
+          content:
+            adplication/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Clouds
+    post:
+      tags:
+      - Clouds
+      summary: Создание заказа на облако
+      operationId: CreateCloud
+      requestBody:
+        content:
+          adplication/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      responses:
+        "200":
+          description: Успешный ответ со списком ресурсов в облаке
+          content:
+            adplication/json:
+              schema:
+                $ref: '#/components/schemas/Clouds'
+        default:
+          description: Все остальное
+          content:
+            adplication/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Clouds
+  /clouds/{cloud_id}:
+    get:
+      tags:
+      - Cloud
+      summary: Метод получения информации о заказе ресурсов на облаке по ID
+      operationId: getCloudOrder
+      parameters:
+      - name: cloud_id
+        in: path
+        description: Идентификатор заказа облака
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: f102b615
+      responses:
+        "200":
+          description: Успешный ответ с информацией о заказе в облаке
+          content:
+            adplication/json:
+              schema:
+                $ref: '#/components/schemas/Cloud'
+        default:
+          description: Все остальное
+          content:
+            adplication/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Cloud
+    delete:
+      tags:
+      - Cloud
+      summary: Метод отмены заказа на облако по ID
+      operationId: cancelCloudById
+      parameters:
+      - name: cloud_id
+        in: path
+        description: Идентификатор заказа облака
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: f102b615
+      responses:
+        "200":
+          description: Успешный ответ заказом облака по ID
+          content:
+            adplication/json: {}
+        "404":
+          description: Заказ с ID не найден
+          content:
+            adplication/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Все остальное
+          content:
+            adplication/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Cloud
+components:
+  schemas:
+    Cloud:
+      required:
+      - CPU
+      - HDD
+      - OS
+      - RAM
+      - id_client
+      type: object
+      properties:
+        cloud_id:
+          type: string
+          example: f102b615
+        id_client:
+          type: string
+          example: f102b615
+        OS:
+          type: string
+          description: Операционная система сервера
+          enum:
+          - Windows
+          - Linux
+        RAM:
+          type: string
+          description: Объем оперативной памяти
+          example: "128"
+        CPU:
+          type: string
+          description: Количество ядер процессора
+          example: "8"
+      example:
+        OS: Windows
+        id_client: f102b615
+        CPU: "8"
+        cloud_id: f102b615
+        RAM: "128"
+    Clouds:
+      type: array
+      items:
+        $ref: '#/components/schemas/Cloud'
+    Error:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string

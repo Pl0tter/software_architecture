@@ -1,0 +1,49 @@
+@startuml ERD Order Cloud
+
+skinparam linetype ortho
+
+class "Customer" as customer {
+    *id : INT **<<PK>>** AUTO_INCREMENT
+    --
+    name : VARCHAR
+    phone : BIGINT UNSIGNED
+    e-mail : VARCHAR
+    login : VARCHAR
+    hash_pwd : BIGINT UNSIGNED
+}
+
+class "Order" as order {
+    *id : BIGINT **<<PK>>** AUTO_INCREMENT
+    --
+    date : TIMESTAMP
+    startdate : TIMESTAMP
+    period : INT
+    CPU : INT
+    GPU : INT
+    RAM : INT
+    HDD : INT
+    comment : VARCHAR
+    *customer_id : INT **<<FK>>**
+    *vm_id : INT **<<FK>>**
+}
+
+class "Virtual Machine" as vm {
+    *id : INT **<<PK>>** AUTO_INCREMENT
+    --
+    *srv_id : INT **<<FK>>**
+}
+
+class "Server" as server {
+    *id : INT **<<PK>>** AUTO_INCREMENT
+    --
+    CPU : INT
+    GPU : INT
+    RAM : INT
+    HDD : INT
+}
+
+customer ||.right.|{ order
+vm }|.left.|| order
+vm ||.right.|{ server
+
+@enduml
