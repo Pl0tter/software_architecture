@@ -211,6 +211,14 @@ paths:
       summary: Обновить группу
       description: Обновить группу
       operationId: updateGroup
+      parameters:
+        - name: groupId
+          in: path
+          description: Идентификатор группы
+          required: true
+          schema:
+            type: integer
+            format: int64      
       requestBody:
         description: Обновить существующую группу в базе
         content:
@@ -299,21 +307,22 @@ paths:
         '405':
           description: Invalid input
           
-  /Robot/{robotId}:      
+  /Robot/{robotId}:
+    parameters:
+    - name: robotId
+      in: path
+      description: ID робота
+      required: true
+      schema:
+        type: integer
+        format: int64
+    
     get:
       tags:
         - Robot
       summary: Получение информации о роботе
       description: Запрос информации о роботе
       operationId: getRobot
-      parameters:
-        - name: robotId
-          in: path
-          description: ID робота
-          required: true
-          schema:
-            type: integer
-            format: int64
       responses:
         '400':
           description: Invalid ID supplied
@@ -364,20 +373,6 @@ paths:
       summary: Удаляет робота
       description: Удаляет робота
       operationId: deleteRobot
-      parameters:
-        - name: robotId
-          in: header
-          description: ''
-          required: false
-          schema:
-            type: string
-        - name: robotId
-          in: path
-          description: ID робота
-          required: true
-          schema:
-            type: integer
-            format: int64
       responses:
         '400':
           description: Invalid Robot value
@@ -416,20 +411,21 @@ paths:
           description: Invalid input
           
   /Schedule/{Id}:
+    parameters:
+      - name: Id
+        in: path
+        description: Идентификатор расписания
+        required: true
+        schema:
+          type: integer
+          format: int64
+          
     get:
       tags:
         - Schedule
       summary: Найти расписание по ID
       description: Вернуть одно расписание
       operationId: getScheduleById
-      parameters:
-        - name: Id
-          in: path
-          description: Идентификатор расписания
-          required: true
-          schema:
-            type: integer
-            format: int64
       responses:
         '200':
           description: successful operation
