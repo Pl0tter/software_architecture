@@ -1,0 +1,65 @@
+@startuml UML Robot VC Token
+' skinparam linetype ortho
+' allowmixing
+
+package Adapter as adapter <<Frame>> {
+    class AccessManager {
+        +parseRequest()
+        
+    }
+    interface iAccess {
+        +createToken(User) : Token
+        +checkToken(Token) : boolean
+        +RemoveToken(Token) : boolean
+    }
+    iAccess <|.up. AccessManager
+}
+
+package Logic as logic <<Frame>> {
+    class AccessController {
+        +makeOrder() : Order
+        +showTimetable() : ArrayList
+        +checkAvailable() : ArrayList
+    }
+    package Domain {
+
+        class User {
+            -name : String
+            -phone : long
+            -email : String
+            -login : String
+            -hash_pwd : long         
+        }
+
+        class Token {
+            -token : String
+            -hash_pwd : long 
+        }
+
+        AccessController -down-> User
+        AccessController -down-> Token
+
+    }
+
+}
+
+package Repository as repo <<Frame>> {
+    class Repository {
+        - link : String
+        connect() : void
+    }
+
+    interface iRepository {
+        + add(Token) : void
+        + read(Token) : Token
+        + update(Token) : boolean
+        + delete(Token) : boolean
+    }
+
+    iRepository <|.up. Repository
+} 
+
+AccessController -left-* AccessManager
+Repository *-left- AccessController
+
+@enduml

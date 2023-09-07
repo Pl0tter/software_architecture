@@ -1,0 +1,63 @@
+@startuml ERD Robot VC
+
+skinparam linetype ortho
+
+entity "User" as user {
+    *id : INT UNSIGNED **<<PK>>** AUTO_INCREMENT
+    --
+    name : VARCHAR
+    phone : BIGINT UNSIGNED
+    e-mail : VARCHAR
+    login : VARCHAR
+    hash_pwd : BIGINT UNSIGNED
+}
+
+entity "Group" as grp {
+    *id : INT UNSIGNED **<<PK>>** AUTO_INCREMENT
+    --
+    name : VARCHAR
+    *user_id : INT UNSIGNED **<<FK>>**
+}
+
+entity "Robot" as robot {
+    *id : INT UNSIGNED **<<PK>>** AUTO_INCREMENT
+    --
+    name : VARCHAR
+    model : VARCHAR
+    version : VARCHAR
+    serial_number : BIGINT UNSIGNED
+    ipv6 : BIGINT UNSIGNED
+    options : JSON
+    *group_id : INT UNSIGNED **<<FK>>**
+}
+
+entity "Token" as token {
+    *id : INT UNSIGNED **<<PK>>** AUTO_INCREMENT
+    --
+    token : VARCHAR
+    hash_pwd : BIGINT UNSIGNED
+    *robot_id : INT UNSIGNED **<<FK>>**
+}
+
+entity "Shedule" as shedule {
+    *id : BIGINT UNSIGNED **<<PK>>** AUTO_INCREMENT
+    --
+    date : TIMESTAMP
+    option : JSON
+    *robot_id : INT UNSIGNED **<<FK>>**
+}
+
+entity "Report" as report {
+    *id : BIGINT UNSIGNED **<<PK>>** AUTO_INCREMENT
+    --
+    remark : VARCHAR
+    *robot_id : INT UNSIGNED **<<FK>>**
+}
+
+token }|.right.|| robot
+grp }|.left.|{ robot
+grp }|.right.|| user
+robot ||.down.|{ report
+robot ||.down.|{ shedule
+
+@enduml
